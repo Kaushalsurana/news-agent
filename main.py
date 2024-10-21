@@ -1,16 +1,22 @@
 import streamlit as st
 from datetime import datetime, timedelta
-from crewai import Agent, Crew, Process, Task
-from crewai.project import CrewBase, agent, crew, task
-from langchain_openai import ChatOpenAI
 import os
-from search_tools import SearchTools
 import yaml
 import logging
-import litellm
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+try:
+    from crewai import Agent, Crew, Process, Task
+    from crewai.project import CrewBase, agent, crew, task
+    from langchain_openai import ChatOpenAI
+    import litellm
+    from search_tools import SearchTools
+except ImportError as e:
+    st.error(f"Failed to import required modules: {str(e)}")
+    st.info("Please make sure all required packages are installed. Check the requirements.txt file.")
+    st.stop()
 
 def get_api_key(key_name, display_name):
     key = st.sidebar.text_input(f"Enter your {display_name}", type="password")
@@ -161,6 +167,7 @@ def main():
         litellm.api_key = openai_api_key  # Set the API key for litellm
     if serper_api_key:
         st.session_state['SERPER_API_KEY'] = serper_api_key
+        os.environ['SERPER_API_KEY'] = serper_api_key  # Set the environment variable
     
     # Main app interface
     topic = st.text_input("Enter a topic for news search:")
@@ -170,9 +177,13 @@ def main():
         elif not (st.session_state.get('OPENAI_API_KEY') and st.session_state.get('SERPER_API_KEY')):
             st.warning("Please enter both API keys in the sidebar.")
         else:
-            with st.spinner(f"🤖 AI agents working on finding news about {topic}..."):
-                run(topic)
-            st.success("✅ Process completed!")
+            try:
+                with st.spinner(f"🤖 AI agents working on finding news about {topic}..."):
+                    run(topic)
+                st.success("✅ Process completed!")
+            except Exception as e:
+                st.error(f"An error occurred: {str(e)}")
+                logger.error(f"Error in run function: {str(e)}", exc_info=True)
     
     if st.checkbox("Show logs"):
         log_file = "app.log"
