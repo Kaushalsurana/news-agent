@@ -7,6 +7,9 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Disable EntityMemory before importing crewai
+os.environ['CREWAI_DISABLE_ENTITY_MEMORY'] = 'true'
+
 try:
     from crewai import Agent, Crew, Process, Task
     from crewai.project import CrewBase, agent, crew, task
@@ -126,6 +129,7 @@ class TopicNewsCrew():
             manager_llm=initialize_openai_chat("gpt-4-turbo"),
             verbose=True
         )
+
 
 def run(topic):
     try:
