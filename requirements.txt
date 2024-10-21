@@ -5,3 +5,4 @@ langchain-openai
 pyyaml
 requests
 litellm
+chromadb
