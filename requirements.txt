@@ -1,0 +1,7 @@
+streamlit
+crewai
+langchain
+langchain-openai
+pyyaml
+requests
+litellm

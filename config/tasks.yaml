@@ -1,0 +1,30 @@
+fetch_topic_news_task:
+  description: |
+    Fetch 8-9 recent news stories related to the topic: {topic}.
+    The current time is {current_time}. First, use the date range {week_range} to find news from the past week.
+    If fewer than 8 results are found, extend the search using {month_range} to find news from the past month.
+    Focus on providing a diverse range of recent and relevant news items.
+  expected_output: |
+    A list of 8-9 relevant news stories related to the given topic, each containing:
+    - Title
+    - URL
+    - Publication date
+    - Brief summary (1-2 sentences)
+
+analyze_topic_news_task:
+  description: |
+    Analyze the fetched news stories related to the topic: {topic}.
+    Provide insights and identify any trends or patterns in the news.
+  expected_output: |
+    A markdown-formatted document containing:
+    1. An overview of the latest news related to the topic.
+    2. For each news item:
+       ## [News Title](URL)
+       **Date**: [Publication Date]
+       **Summary**: Brief summary of the news item
+       **Key Points**:
+       - Bullet point 1
+       - Bullet point 2
+       - Bullet point 3
+    3. A brief analysis of trends or patterns observed in the news items.
+    4. Any notable developments or insights related to the topic.
